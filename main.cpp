@@ -1,0 +1,45 @@
+#include <iostream>
+
+void destroy_matrix(int** mtx, size_t created)
+{
+    for (size_t i = 0; i < created; i++)
+    {
+        delete[] mtx[i];
+    }
+    delete[] mtx;
+}
+
+int** create_matrix(size_t rows, size_t cols)
+{
+    int **mtx = new int *[rows];
+    size_t created = 0;
+    try
+    {
+        for (; created < rows; created++) // for (size_t i = 0; i < rows; i++)
+        {
+            mtx[created] = new int[cols];
+        }
+    }
+    catch (const std::bad_alloc &e)
+    {
+        destroy_matrix(mtx, created);
+        throw;
+    }
+    return mtx;
+}
+
+int main() 
+{
+    
+	int **mtx = nullptr;
+	try
+	{
+	    mtx = create_matrix(5, 5);
+	}
+	catch (const std::bad_alloc & e)
+	{
+	    std::cerr << e.what() << "\n";
+	    return 1;
+	}
+	destroy_matrix(mtx, 5);
+}
